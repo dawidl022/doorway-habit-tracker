@@ -9,7 +9,7 @@ def get(id: str):
     pass
 
 
-def create(new_habit: dtos.NewHabit):
+def create(new_habit: dtos.NewHabit) -> dtos.CreatedHabit:
     pass
 
 

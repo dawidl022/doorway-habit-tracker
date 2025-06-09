@@ -1,4 +1,6 @@
-from flask import Flask, jsonify, request
+from http import HTTPStatus
+
+from flask import Flask, jsonify, make_response, request
 from habits import dtos
 from habits import service as habits
 
@@ -20,7 +22,8 @@ def get_habit(id: str):
 
 @app.post(ALL_HABITS_ENDPOINT)
 def create_habit():
-    habits.create(dtos.NewHabit.from_dict(request.json))
+    created_habit = habits.create(dtos.NewHabit.from_dict(request.json))
+    return jsonify(created_habit.to_dict()), HTTPStatus.CREATED
 
 
 @app.put(HABIT_ENDPOINT)
