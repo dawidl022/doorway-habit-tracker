@@ -1,38 +1,24 @@
-from http import HTTPStatus
-
-from flask import Flask, jsonify, request
-from habits import dtos
-from habits import service as habits
-
-app = Flask(__name__)
-
-ALL_HABITS_ENDPOINT = "/habits"
-HABIT_ENDPOINT = f"/{ALL_HABITS_ENDPOINT}/<id>"
+from config import DbConfig
+from flask import Flask
+from flask_injector import FlaskInjector
+from habits.repository import SqlHabitRepository
+from habits.routes import bp as habits_bp
+from habits.service import HabitService
+from injector import Binder
 
 
-@app.get(ALL_HABITS_ENDPOINT)
-def get_all_habits(habits_service: habits.HabitService):
-    return jsonify(habits_service.get_all())
+def create_app() -> Flask:
+    app = Flask(__name__)
+
+    app.register_blueprint(habits_bp)
+
+    FlaskInjector(app, modules=[configure_dependencies])
+
+    return app
 
 
-@app.get(HABIT_ENDPOINT)
-def get_habit(id: str, habits_service: habits.HabitService):
-    return jsonify(habits_service.get(id))
+def configure_dependencies(binder: Binder):
+    habit_repo = SqlHabitRepository(DbConfig())
+    habit_service = HabitService(habit_repo)
 
-
-@app.post(ALL_HABITS_ENDPOINT)
-def create_habit(habits_service: habits.HabitService):
-    created_habit = habits_service.create(dtos.NewHabit.from_dict(request.json))
-    return jsonify(created_habit.to_dict()), HTTPStatus.CREATED
-
-
-@app.put(HABIT_ENDPOINT)
-def update_habit(id: str, habits_service: habits.HabitService):
-    habits_service.update(id, dtos.NewHabit.from_dict(request.json))
-
-
-@app.delete(
-    HABIT_ENDPOINT,
-)
-def delete_habit(id: str, habits_service: habits.HabitService):
-    habits_service.delete(id)
+    binder.bind(HabitService, to=habit_service)

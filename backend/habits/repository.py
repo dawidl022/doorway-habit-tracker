@@ -84,7 +84,7 @@ class SqlHabitRepository(HabitRepository):
     def upsert(self, habit: Habit):
         with self.Session() as session:
             habit_row = HabitTable(id=habit.id, description=habit.description)
-            session.add(habit_row)
+            session.merge(habit_row)
             session.commit()
 
     def delete(self, id: UUID):

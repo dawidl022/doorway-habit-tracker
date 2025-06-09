@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from uuid import UUID
 
 
 @dataclass(frozen=True)
@@ -20,8 +21,8 @@ class NewHabit:
 
 
 @dataclass(frozen=True)
-class CreatedHabit(NewHabit):
-    id: str
+class CreatedHabit:
+    id: UUID
 
     def to_dict(self) -> dict:
         return {

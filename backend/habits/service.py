@@ -16,9 +16,9 @@ class HabitService:
         return self.repository.get(id)
 
     def create(self, new_habit: dtos.NewHabit) -> dtos.CreatedHabit:
-        return self.repository.upsert(
-            Habit(id=uuid4(), description=new_habit.description)
-        )
+        habit_id = uuid4()
+        self.repository.upsert(Habit(id=habit_id, description=new_habit.description))
+        return dtos.CreatedHabit(habit_id)
 
     def update(self, id: UUID, new_habit: dtos.NewHabit):
         return self.repository.upsert(Habit(id=id, description=new_habit.description))
