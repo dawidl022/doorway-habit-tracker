@@ -1,7 +1,8 @@
 from dataclasses import dataclass
+from uuid import UUID
 
 
 @dataclass(frozen=True)
 class Habit:
-    id: str
+    id: UUID
     description: str

@@ -1,6 +1,6 @@
 from http import HTTPStatus
 
-from flask import Flask, jsonify, make_response, request
+from flask import Flask, jsonify, request
 from habits import dtos
 from habits import service as habits
 
@@ -11,26 +11,28 @@ HABIT_ENDPOINT = f"/{ALL_HABITS_ENDPOINT}/<id>"
 
 
 @app.get(ALL_HABITS_ENDPOINT)
-def get_all_habits():
-    return jsonify(habits.get_all())
+def get_all_habits(habits_service: habits.HabitService):
+    return jsonify(habits_service.get_all())
 
 
 @app.get(HABIT_ENDPOINT)
-def get_habit(id: str):
-    return jsonify(habits.get(id))
+def get_habit(id: str, habits_service: habits.HabitService):
+    return jsonify(habits_service.get(id))
 
 
 @app.post(ALL_HABITS_ENDPOINT)
-def create_habit():
-    created_habit = habits.create(dtos.NewHabit.from_dict(request.json))
+def create_habit(habits_service: habits.HabitService):
+    created_habit = habits_service.create(dtos.NewHabit.from_dict(request.json))
     return jsonify(created_habit.to_dict()), HTTPStatus.CREATED
 
 
 @app.put(HABIT_ENDPOINT)
-def update_habit(id: str):
-    habits.update(id, dtos.NewHabit.from_dict(request.json))
+def update_habit(id: str, habits_service: habits.HabitService):
+    habits_service.update(id, dtos.NewHabit.from_dict(request.json))
 
 
-@app.delete(HABIT_ENDPOINT)
-def delete_habit(id: str):
-    habits.delete(id)
+@app.delete(
+    HABIT_ENDPOINT,
+)
+def delete_habit(id: str, habits_service: habits.HabitService):
+    habits_service.delete(id)
