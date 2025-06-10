@@ -4,13 +4,14 @@ from flask import Blueprint, jsonify, request
 from validation import validate_uuid
 
 from .dtos import CheckIn as CheckInDTO
+from .dtos import Streak as StreakDTO
 from .models import CheckIn
 from .service import CheckInService
 
 bp = Blueprint("check_ins", __name__, url_prefix="/habits")
 
 CHECK_IN_ENDPOINT = "/<id>/check-ins"
-STREAK_ENDPOINT = "/<id>/streak"
+STREAK_ENDPOINT = "/<id>/streaks"
 
 
 @bp.get(CHECK_IN_ENDPOINT)
@@ -39,4 +40,6 @@ def delete_check_in(id: str, check_in_service: CheckInService):
 @bp.get(STREAK_ENDPOINT)
 def get_streaks(id: str, check_in_service: CheckInService):
     habit_id = validate_uuid(id)
-    return jsonify(check_in_service.get_streaks(habit_id))
+    return jsonify(
+        [StreakDTO(streak) for streak in check_in_service.get_streaks(habit_id)]
+    )

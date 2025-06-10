@@ -3,8 +3,9 @@ from abc import ABC, abstractmethod
 from uuid import UUID
 
 import sqlalchemy.orm
+from sqlalchemy import text
 
-from .models import CheckIn
+from .models import CheckIn, Streak
 from .tables import CheckIn as CheckInTable
 
 
@@ -24,8 +25,14 @@ class CheckInRepository(ABC):
         """Delete a check-in for a habit on a specific date."""
         pass
 
+    @abstractmethod
     def habit_id_check_ins_by_date(self, date: datetime.date) -> list[UUID]:
         """List all habit IDs that have a check-in on a specific date."""
+        pass
+
+    @abstractmethod
+    def calc_streaks(self, habit_id: UUID) -> list[Streak]:
+        """Calculate streaks for a specific habit."""
         pass
 
 
@@ -61,4 +68,24 @@ class SqlCheckInRepository(CheckInRepository):
                 for row in session.query(CheckInTable.habit_id)
                 .filter(CheckInTable.date == date)
                 .all()
+            ]
+
+    def calc_streaks(self, habit_id: UUID) -> list[Streak]:
+        with self.Session() as session:
+            query = text(
+                """
+                SELECT MIN(date) AS start_date, MAX(date) AS end_date FROM (
+                    SELECT habit_id, date, (date - (SELECT MIN(date) FROM check_ins) + 1 - ROW_NUMBER() OVER ()) AS streak_id
+                    FROM check_ins
+                    WHERE habit_id = :habit_id
+                    ORDER BY date
+                )
+                GROUP BY streak_id;
+                """
+            )
+
+            result = session.execute(query, {"habit_id": habit_id}).fetchall()
+            return [
+                Streak(start_date=row.start_date, end_date=row.end_date)
+                for row in result
             ]

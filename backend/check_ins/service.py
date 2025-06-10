@@ -42,7 +42,6 @@ class CheckInService:
         lasting at least 1 day.
         """
         self._check_habit_exists(habit_id)
-        # TODO
         return self.check_in_repo.calc_streaks(habit_id)
 
     def _check_habit_exists(self, habit_id: UUID):

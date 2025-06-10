@@ -15,6 +15,8 @@ docker compose up
 
 The server should be available at http://localhost:8080
 
+<!-- TODO instructions to run tests -->
+
 ## Frontend
 
 ![Screenshot of app](./docs/screenshots/app.png)
