@@ -1,6 +1,7 @@
 import type { FC } from "react";
 import type { Habit } from "../../models/habit";
 import HabitTile from "./HabitTile";
+import "./HabitList.css";
 
 interface Props {
   habits: Habit[];
@@ -9,7 +10,7 @@ interface Props {
 
 const HabitList: FC<Props> = ({ habits, markHabit }) => {
   return (
-    <ul>
+    <ul className="habit-list">
       {habits.map((h) => (
         <li key={h.id}>
           <HabitTile

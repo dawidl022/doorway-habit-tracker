@@ -1,4 +1,5 @@
 import { useState, type FC } from "react";
+import "./NewHabitForm.css";
 
 interface Props {
   onCreate: (habitTest: string) => void;
@@ -20,7 +21,7 @@ const NewHabitForm: FC<Props> = ({ onCreate }) => {
   };
 
   return (
-    <form onSubmit={createHabit}>
+    <form onSubmit={createHabit} className="habit-form">
       <label htmlFor="new-habit-field">Add a Habit</label>
       <input
         type="text"

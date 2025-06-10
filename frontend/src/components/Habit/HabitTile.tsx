@@ -9,12 +9,15 @@ interface Props {
 
 const HabitTile: FC<Props> = ({ habit, markHabit }) => {
   return (
-    <div>
+    <div
+      className={habit.completedToday ? "habit-tile completed" : "habit-tile"}
+    >
       <form onSubmit={(e) => e.preventDefault()}>
         <label htmlFor={`habit-${habit.id}`} className="habit-checkbox-label">
           Completed today
         </label>
         <input
+          className="habit-checkbox"
           type="checkbox"
           id={`habit-${habit.id}`}
           checked={habit.completedToday}

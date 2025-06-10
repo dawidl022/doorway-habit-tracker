@@ -3,6 +3,7 @@ import NewHabitForm from "./Habit/NewHabitForm";
 import HabitList from "./Habit/HabitList";
 import type { Habit } from "../models/habit";
 import { useApi } from "../api/api";
+import "./HabitTracker.css";
 
 const HabitTacker: FC = () => {
   const [habits, setHabits] = useState<Habit[] | null>(null);
@@ -46,7 +47,7 @@ const HabitTacker: FC = () => {
   useEffect(fetchHabits, []);
 
   return (
-    <main>
+    <main className="habit-tracker">
       <NewHabitForm onCreate={createHabit} />
       {habits ? (
         <HabitList habits={habits} markHabit={markHabit} />
