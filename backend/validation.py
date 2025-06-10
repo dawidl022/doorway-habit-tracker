@@ -1,8 +1,6 @@
 from http import HTTPStatus
 from uuid import UUID
 
-from flask import abort, make_response
-
 
 def validate_uuid(uuid_string: str) -> UUID:
     try:

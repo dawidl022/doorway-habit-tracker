@@ -15,7 +15,27 @@ docker compose up
 
 The server should be available at http://localhost:8080
 
-<!-- TODO instructions to run tests -->
+### Running tests
+
+Ensure you have Python3 installed, then create and activate a virtual environment:
+
+```bash
+cd backend
+python3 -m venv venv
+. venv/bin/activate
+```
+
+Then install the required dependencies:
+
+```bash
+pip3 install -r requirements.txt
+```
+
+Finally, run the pytest tests:
+
+```bash
+python3 -m pytest
+```
 
 ## Frontend
 

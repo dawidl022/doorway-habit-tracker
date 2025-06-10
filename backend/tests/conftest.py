@@ -2,7 +2,7 @@ from datetime import date
 from uuid import UUID
 
 import pytest
-from check_ins.models import CheckIn
+from check_ins.models import CheckIn, Streak
 from check_ins.repository import CheckInRepository
 from check_ins.service import CheckInService
 from config import register_routes
@@ -111,3 +111,9 @@ class InMemoryCheckInRepository(CheckInRepository):
             for habit_id, check_ins in self.data.check_ins.items()
             if check_in_date in check_ins
         ]
+
+    def calc_streaks(self, habit_id: UUID) -> list[Streak]:
+        """Calculate streaks for a specific habit."""
+        raise NotImplementedError(
+            "Streak calculation is not implemented in the in-memory repository."
+        )
