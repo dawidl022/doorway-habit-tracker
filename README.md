@@ -41,6 +41,10 @@ python3 -m pytest
 
 ![Screenshot of app](./docs/screenshots/app.png)
 
+The frontend is compatible with the backend implementation, modulo the streak
+and last check-in date summaries, which are not currently returned by the
+`GET /habits` endpoint.
+
 ### Running locally
 
 Ensure you have node.js and npm installed, then run:
