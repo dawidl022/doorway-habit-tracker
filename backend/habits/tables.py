@@ -14,6 +14,3 @@ class Habit(Base):
 
     id: Mapped[UUID] = mapped_column(sqlalchemy.Uuid(as_uuid=True), primary_key=True)
     description: Mapped[str]
-    check_ins: Mapped[list["CheckIn"]] = relationship(
-        back_populates="habit", cascade="all, delete-orphan"
-    )

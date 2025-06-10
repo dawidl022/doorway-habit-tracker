@@ -11,8 +11,7 @@ class CheckIn(Base):
     __tablename__ = "check_ins"
 
     habit_id: Mapped[UUID] = mapped_column(
-        sqlalchemy.ForeignKey("habits.id"), primary_key=True
+        sqlalchemy.ForeignKey("habits.id", ondelete="CASCADE"),
+        primary_key=True,
     )
-    # TODO remove unused field
-    habit: Mapped[Habit] = relationship(back_populates="check_ins")
     date: Mapped[datetime.date] = mapped_column(sqlalchemy.Date, primary_key=True)
