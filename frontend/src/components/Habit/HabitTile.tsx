@@ -1,5 +1,6 @@
 import type { FC } from "react";
 import type { Habit } from "../../models/habit";
+import HabitStats from "../HabitStats/HabitStats";
 import "./HabitTile.css";
 
 interface Props {
@@ -25,6 +26,9 @@ const HabitTile: FC<Props> = ({ habit, markHabit }) => {
         />
       </form>
       <h2>{habit.description}</h2>
+      <div className="stats">
+        <HabitStats habit={habit} />
+      </div>
     </div>
   );
 };

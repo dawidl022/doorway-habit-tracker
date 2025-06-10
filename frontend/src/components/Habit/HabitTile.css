@@ -1,16 +1,23 @@
 .habit-tile {
-    display: flex;
+    display: grid;
+    grid-template-columns: auto [content-start] 1fr;
     align-items: center;
-    gap: 1rem;
+    align-content: center;
+    justify-items: left;
+    gap: 0 1rem;
     min-height: 4rem;
     background-color: #333;
-    padding: 0 1rem;
+    padding: 0.2rem 1rem;
     border-radius: 0.5rem;
 
     h2 {
         font-size: 1rem;
         font-weight: 500;
         margin: 0;
+    }
+
+    form {
+        grid-row: span 2;
     }
 
     .habit-checkbox {
@@ -25,8 +32,15 @@
     }
 
     &.completed {
-        text-decoration: line-through;
         color: #aaa;
         background-color: #282828;
+        
+        h2 {
+            text-decoration: line-through;
+        }
+    }
+
+    .stats {
+        grid-column-start: content-start;
     }
 }
