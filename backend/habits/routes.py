@@ -1,7 +1,7 @@
 from http import HTTPStatus
 
 from flask import Blueprint, jsonify, request
-from validation import abort_with_habit_not_found, validate_uuid
+from validation import HabitNotFoundError, validate_uuid
 
 from . import dtos
 from .service import HabitService
@@ -21,7 +21,7 @@ def get_habit(id: str, habits_service: HabitService):
     id = validate_uuid(id)
     habit = habits_service.get(id)
     if habit is None:
-        abort_with_habit_not_found()
+        raise HabitNotFoundError()
     return jsonify(habit)
 
 

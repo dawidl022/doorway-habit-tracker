@@ -22,5 +22,6 @@ class ValidationError(ValueError):
         return {"error": self.message}, HTTPStatus.BAD_REQUEST
 
 
-def abort_with_habit_not_found():
-    abort(make_response({"error": "habit not found"}, HTTPStatus.NOT_FOUND))
+class HabitNotFoundError(Exception):
+    def handle(self):
+        return {"error": "habit not found"}, HTTPStatus.NOT_FOUND

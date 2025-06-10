@@ -1,7 +1,7 @@
 from http import HTTPStatus
 
 from flask import Blueprint, jsonify, request
-from validation import abort_with_habit_not_found, validate_uuid
+from validation import validate_uuid
 
 from .dtos import CheckIn as CheckInDTO
 from .models import CheckIn
@@ -17,8 +17,6 @@ STREAK_ENDPOINT = "/<id>/streak"
 def get_check_ins(id: str, check_in_service: CheckInService):
     habit_id = validate_uuid(id)
     check_ins = check_in_service.get_check_ins(habit_id)
-    if check_ins is None:
-        abort_with_habit_not_found()
     return jsonify([CheckInDTO(check_in) for check_in in check_ins])
 
 

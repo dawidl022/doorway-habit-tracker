@@ -10,7 +10,7 @@ from habits.repository import SqlHabitRepository
 from habits.routes import bp as habits_bp
 from habits.service import HabitService
 from injector import Binder
-from validation import ValidationError
+from validation import HabitNotFoundError, ValidationError
 
 
 def create_app() -> Flask:
@@ -19,6 +19,7 @@ def create_app() -> Flask:
     app.register_blueprint(habits_bp)
     app.register_blueprint(check_ins_bp)
     app.register_error_handler(ValidationError, ValidationError.handle)
+    app.register_error_handler(HabitNotFoundError, HabitNotFoundError.handle)
 
     FlaskInjector(app, modules=[configure_dependencies])
 
@@ -34,8 +35,8 @@ def configure_dependencies(binder: Binder):
     habit_repo = SqlHabitRepository(Session)
     habit_service = HabitService(habit_repo)
 
-    checkin_repo = SqlCheckInRepository(Session)
-    checkin_service = CheckInService(checkin_repo)
+    check_in_repo = SqlCheckInRepository(Session)
+    check_in_service = CheckInService(check_in_repo, habit_repo)
 
     binder.bind(HabitService, to=habit_service)
-    binder.bind(CheckInService, to=checkin_service)
+    binder.bind(CheckInService, to=check_in_service)

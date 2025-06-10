@@ -1,41 +1,54 @@
 import datetime
+from uuid import UUID
+
+from habits.repository import HabitRepository
+from validation import HabitNotFoundError
 
 from .models import CheckIn, Streak
 from .repository import CheckInRepository
 
 
 class CheckInService:
-    def __init__(self, repository: CheckInRepository):
-        self.repository = repository
+    def __init__(self, check_in_repo: CheckInRepository, habit_repo: HabitRepository):
+        self.check_in_repo = check_in_repo
+        self.habit_repo = habit_repo
 
-    def get_check_ins(self, habit_id: str) -> list[CheckIn]:
+    def get_check_ins(self, habit_id: UUID) -> list[CheckIn]:
         """
         Retrieves all check-ins for a given habit.
         """
-        # TODO check that habit exists, otherwise return none that will 404
-        return self.repository.list_for_habit(habit_id)
+        self._check_habit_exists(habit_id)
+        return self.check_in_repo.list_for_habit(habit_id)
 
-    def check_in(self, habit_id: str, check_in: CheckIn):
+    def check_in(self, habit_id: UUID, check_in: CheckIn):
         """
         Records a check-in for a habit on a specific date.
         If the check-in already exists, the action is a noop.
         """
-        # TODO check that habit exists, otherwise return none that will 404
-        self.repository.upsert(habit_id, check_in)
+        self._check_habit_exists(habit_id)
+        self.check_in_repo.upsert(habit_id, check_in)
 
-    def delete_check_in(self, habit_id: str, date: datetime.date):
+    def delete_check_in(self, habit_id: UUID, date: datetime.date):
         """
         Deletes a check-in for a habit on a specific date.
         """
-        # TODO check that habit exists, otherwise return none that will 404
-        self.repository.delete(habit_id, date)
+        self._check_habit_exists(habit_id)
+        self.check_in_repo.delete(habit_id, date)
 
-    def get_streaks(self, habit_id: str) -> list[Streak]:
+    def get_streaks(self, habit_id: UUID) -> list[Streak]:
         """
         Retrieves all streaks for a given habit.
         A streak is defined as a continuous sequence of check-ins
         lasting at least 1 day.
         """
-        # TODO check that habit exists, otherwise return none that will 404
+        self._check_habit_exists(habit_id)
         # TODO
-        return self.repository.calc_streaks(habit_id)
+        return self.check_in_repo.calc_streaks(habit_id)
+
+    def _check_habit_exists(self, habit_id: UUID):
+        """
+        Checks if a habit exists in the repository.
+        Raises an exception if the habit does not exist.
+        """
+        if self.habit_repo.get(habit_id) is None:
+            raise HabitNotFoundError()
