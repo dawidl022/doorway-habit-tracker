@@ -1,6 +1,19 @@
+# Simple Habit Tracker
+
+A very simple and minimalistic habit tracker.
+
 ## Backend
 
 ### Running locally
+
+Ensure you have docker installed, and simply run:
+
+```bash
+cd backend
+docker compose up
+```
+
+The server should be available at http://localhost:8080
 
 ## Frontend
 
@@ -10,7 +23,7 @@
 
 Ensure you have node.js and npm installed, then run:
 
-```
+```bash
 cd frontend
 npm install
 npm run dev
