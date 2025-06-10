@@ -4,6 +4,20 @@
 
 ## Frontend
 
+![Screenshot of app](./docs/screenshots/app.png)
+
+### Running locally
+
+Ensure you have node.js and npm installed, then run:
+
+```
+cd frontend
+npm install
+npm run dev
+```
+
+The app should load at http://localhost:5173
+
 ### Browser compatibility
 
 The base app has been tested on the latest versions of Firefox and Chrome.
