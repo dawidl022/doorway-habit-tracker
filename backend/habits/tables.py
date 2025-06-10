@@ -1,12 +1,8 @@
-from typing import TYPE_CHECKING
 from uuid import UUID
 
 import sqlalchemy
 from db import Base
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-
-if TYPE_CHECKING:
-    from check_ins.tables import CheckIn
+from sqlalchemy.orm import Mapped, mapped_column
 
 
 class Habit(Base):

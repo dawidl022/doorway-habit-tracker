@@ -1,8 +1,21 @@
 import os
-from dataclasses import dataclass
+
+from check_ins.routes import bp as check_ins_bp
+from habits.routes import bp as habits_bp
+from validation import HabitNotFoundError, ValidationError
+
+
+def register_routes(app):
+    app.register_blueprint(habits_bp)
+    app.register_blueprint(check_ins_bp)
+    app.register_error_handler(ValidationError, ValidationError.handle)
+    app.register_error_handler(HabitNotFoundError, HabitNotFoundError.handle)
 
 
 def must_get_env(name: str) -> str:
+    """Read an environment variable, or raise an exception is the
+    environment variable is not set"""
+
     value = os.getenv(name)
 
     if value is None or len(value) == 0:

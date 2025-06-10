@@ -10,6 +10,7 @@ class NewHabit:
 
     @staticmethod
     def from_dict(data: dict) -> "NewHabit":
+        """Create a NewHabit instance from a dictionary, validating the input."""
         description = data.get("description")
 
         if not isinstance(description, str):
@@ -34,6 +35,8 @@ class HabitWithSummary:
     completed_today: bool
 
     def to_dict(self) -> dict:
+        """Convert the habit to a camelCase dictionary representation, to return
+        from the API."""
         return {
             "id": str(self.id),
             "description": self.description,

@@ -3,10 +3,8 @@ from uuid import UUID
 
 import sqlalchemy
 import sqlalchemy.orm
-from config import DbConfig
 
 from .models import Habit
-from .tables import Base
 from .tables import Habit as HabitTable
 
 
@@ -30,29 +28,6 @@ class HabitRepository(ABC):
     def delete(self, id: UUID):
         """Delete a habit by its ID."""
         pass
-
-
-class InMemoryHabitRepository(HabitRepository):
-    """Simple in-memory implementation of HabitRepository for testing
-    purposes."""
-
-    def __init__(self):
-        self.habits = {}
-
-    def get_all(self) -> list[Habit]:
-        return list(self.habits.values())
-
-    def get(self, id: UUID) -> Habit | None:
-        return self.habits.get(id)
-
-    def upsert(self, habit: Habit):
-        self.habits[habit.id] = habit
-
-    def delete(self, id: UUID):
-        # TODO should cascade delete check-ins, as such a single in-memory
-        # repository should contain both habits and check-ins
-        if id in self.habits:
-            del self.habits[id]
 
 
 class SqlHabitRepository(HabitRepository):
