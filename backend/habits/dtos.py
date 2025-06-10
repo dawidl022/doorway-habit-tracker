@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from uuid import UUID
 
+from validation import ValidationError
+
 
 @dataclass(frozen=True)
 class NewHabit:
@@ -8,7 +10,7 @@ class NewHabit:
 
     @staticmethod
     def from_dict(data: dict) -> "NewHabit":
-        description = data.get("description", "")
+        description = data.get("description")
 
         if not isinstance(description, str):
             raise ValidationError("description field must be a string")
@@ -28,11 +30,3 @@ class CreatedHabit:
         return {
             "id": self.id,
         }
-
-
-class ValidationError(Exception):
-    """Custom exception for validation errors in DTOs."""
-
-    def __init__(self, message: str):
-        super().__init__(message)
-        self.message = message

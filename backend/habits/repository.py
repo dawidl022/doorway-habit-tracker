@@ -49,17 +49,14 @@ class InMemoryHabitRepository(HabitRepository):
         self.habits[habit.id] = habit
 
     def delete(self, id: UUID):
+        # TODO should cascade delete check-ins, as such a single in-memory
+        # repository should contain both habits and check-ins
         if id in self.habits:
             del self.habits[id]
 
 
 class SqlHabitRepository(HabitRepository):
-    def __init__(self, db_config: DbConfig):
-        """Initialize the SQL Habit Repository with a database URL."""
-        engine = sqlalchemy.create_engine(db_config.url, echo=True)
-        Base.metadata.create_all(engine)
-
-        Session = sqlalchemy.orm.sessionmaker(engine)
+    def __init__(self, Session: sqlalchemy.orm.sessionmaker[sqlalchemy.orm.Session]):
         self.Session = Session
 
     def get_all(self) -> list[Habit]:

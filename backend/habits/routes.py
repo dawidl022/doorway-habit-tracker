@@ -1,7 +1,7 @@
 from http import HTTPStatus
-from uuid import UUID
 
-from flask import Blueprint, abort, jsonify, make_response, request
+from flask import Blueprint, jsonify, request
+from validation import abort_with_habit_not_found, validate_uuid
 
 from . import dtos
 from .service import HabitService
@@ -9,13 +9,6 @@ from .service import HabitService
 bp = Blueprint("habits", __name__, url_prefix="/habits")
 
 HABIT_ENDPOINT = f"/<id>"
-
-
-def validate_uuid(uuid_string: str) -> UUID:
-    try:
-        return UUID(uuid_string)
-    except ValueError:
-        abort(make_response({"error": "invalid UUID format"}, HTTPStatus.BAD_REQUEST))
 
 
 @bp.get("")
@@ -28,7 +21,7 @@ def get_habit(id: str, habits_service: HabitService):
     id = validate_uuid(id)
     habit = habits_service.get(id)
     if habit is None:
-        abort(make_response({"error": "habit not found"}, HTTPStatus.NOT_FOUND))
+        abort_with_habit_not_found()
     return jsonify(habit)
 
 
