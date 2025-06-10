@@ -1,0 +1,4 @@
+.habit-checkbox-label {
+    /* Hide from view, but remain in document for accessibility */
+    font-size: 0;
+}

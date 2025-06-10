@@ -2,3 +2,4 @@ Flask-Injector==0.15.0
 Flask==2.*
 SQLAlchemy==2.*
 psycopg2==2.*
+flask-cors==6.*

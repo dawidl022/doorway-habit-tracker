@@ -11,6 +11,14 @@ def must_get_env(name: str) -> str:
     return value
 
 
+class Config:
+    """Configuration for the application."""
+
+    def __init__(self):
+        self.frontend_url = must_get_env("FRONTEND_URL")
+        self.db = DbConfig()
+
+
 class DbConfig:
     """Configuration for the database connection."""
 
