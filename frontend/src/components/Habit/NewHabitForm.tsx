@@ -25,6 +25,7 @@ const NewHabitForm: FC<Props> = ({ onCreate }) => {
       <label htmlFor="new-habit-field">Add a Habit</label>
       <input
         type="text"
+        id="new-habit-field"
         value={habitText}
         onChange={(e) => setHabitText(e.target.value)}
       />
