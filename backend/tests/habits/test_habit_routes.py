@@ -28,6 +28,28 @@ def test_get_all_habits__given_a_habits_created__returns_list_with_that_habit(
     assert response.json[0]["description"] == "Test Habit"
 
 
+def test_get_all_habits__given_multiple_habits_created__returns_list_with_all_habits(
+    client: FlaskClient,
+):
+    # Create multiple habits
+    response1 = client.post("/habits", json={"description": "First Habit"})
+    assert response1.status_code == 201
+    habit1 = response1.json
+
+    response2 = client.post("/habits", json={"description": "Second Habit"})
+    assert response2.status_code == 201
+    habit2 = response2.json
+
+    # Now get all habits
+    response = client.get("/habits")
+    assert response.status_code == 200
+    assert len(response.json) == 2
+    assert response.json[0]["id"] == habit1["id"]
+    assert response.json[0]["description"] == "First Habit"
+    assert response.json[1]["id"] == habit2["id"]
+    assert response.json[1]["description"] == "Second Habit"
+
+
 def test_get_habit__given_non_existent_id__returns_404(
     client: FlaskClient,
 ):

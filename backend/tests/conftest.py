@@ -2,6 +2,7 @@ from datetime import date
 from uuid import UUID
 
 import pytest
+from check_ins.models import CheckIn
 from check_ins.repository import CheckInRepository
 from check_ins.service import CheckInService
 from config import register_routes
@@ -89,16 +90,19 @@ class InMemoryCheckInRepository(CheckInRepository):
         self.data = data
 
     def list_for_habit(self, habit_id: UUID) -> list[date]:
-        return self.data.check_ins.get(habit_id, [])
+        return [CheckIn(date) for date in self.data.check_ins.get(habit_id, [])]
 
-    def upsert(self, habit_id: UUID, check_in_date: date):
+    def upsert(self, habit_id: UUID, check_in: CheckIn):
         if habit_id not in self.data.check_ins:
             self.data.check_ins[habit_id] = []
-        if check_in_date not in self.data.check_ins[habit_id]:
-            self.data.check_ins[habit_id].append(check_in_date)
+        if check_in.date not in self.data.check_ins[habit_id]:
+            self.data.check_ins[habit_id].append(check_in.date)
 
     def delete(self, habit_id: UUID, check_in_date: date):
-        if habit_id in self.data.check_ins and self.data.check_ins[habit_id]:
+        if (
+            habit_id in self.data.check_ins
+            and check_in_date in self.data.check_ins[habit_id]
+        ):
             self.data.check_ins[habit_id].remove(check_in_date)
 
     def habit_id_check_ins_by_date(self, check_in_date: date) -> list[UUID]:
