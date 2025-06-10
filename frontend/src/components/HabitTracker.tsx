@@ -30,18 +30,15 @@ const HabitTacker: FC = () => {
 
   const markHabit = (id: string, completed: boolean) => {
     const today = new Date().toISOString().split("T")[0];
-    if (completed) {
-      // TODO handle error
-      api.checkIn(id, today);
-    } else {
-      api.deleteCheckIn(id, today);
-    }
-
-    setHabits((prevHabits) => {
-      return prevHabits!.map((habit) =>
-        habit.id === id ? { ...habit, completedToday: completed } : habit
-      );
-    });
+    (completed ? api.checkIn(id, today) : api.deleteCheckIn(id, today)).then(
+      () => {
+        setHabits((prevHabits) => {
+          return prevHabits!.map((habit) =>
+            habit.id === id ? { ...habit, completedToday: completed } : habit
+          );
+        });
+      }
+    );
   };
 
   useEffect(fetchHabits, []);

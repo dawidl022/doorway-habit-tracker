@@ -43,9 +43,3 @@ def delete_habit(id: str, habits_service: HabitService):
     id = validate_uuid(id)
     habits_service.delete(id)
     return "", HTTPStatus.NO_CONTENT
-
-
-# TODO route handler tests:
-# - invalid UUIDs
-# - invalid Habit DTOs
-# - no Habit returns 404

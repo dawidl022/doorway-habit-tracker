@@ -73,6 +73,14 @@ def test_get_habit__given_valid_id__returns_habit(
     assert response.json["description"] == "Test Habit"
 
 
+def test_create_habit__given_empty_description__returns_400(
+    client: FlaskClient,
+):
+    response = client.post("/habits", json={"description": ""})
+    assert response.status_code == 400
+    assert response.json["error"] == "description field cannot be empty"
+
+
 def test_put_habit__given_valid_id_and_data__updates_habit(
     client: FlaskClient,
 ):
