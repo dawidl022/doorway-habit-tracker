@@ -26,7 +26,16 @@ class NewHabit:
 class CreatedHabit:
     id: UUID
 
+
+@dataclass(frozen=True)
+class HabitWithSummary:
+    id: UUID
+    description: str
+    completed_today: bool
+
     def to_dict(self) -> dict:
         return {
-            "id": self.id,
+            "id": str(self.id),
+            "description": self.description,
+            "completedToday": self.completed_today,
         }

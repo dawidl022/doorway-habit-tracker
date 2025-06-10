@@ -13,7 +13,7 @@ HABIT_ENDPOINT = f"/<id>"
 
 @bp.get("")
 def get_all_habits(habits_service: HabitService):
-    return jsonify(habits_service.get_all())
+    return jsonify([habit.to_dict() for habit in habits_service.get_all()])
 
 
 @bp.get(HABIT_ENDPOINT)
@@ -28,7 +28,7 @@ def get_habit(id: str, habits_service: HabitService):
 @bp.post("")
 def create_habit(habits_service: HabitService):
     created_habit = habits_service.create(dtos.NewHabit.from_dict(request.json))
-    return jsonify(created_habit.to_dict()), HTTPStatus.CREATED
+    return jsonify(created_habit), HTTPStatus.CREATED
 
 
 @bp.put(HABIT_ENDPOINT)

@@ -1,4 +1,7 @@
+import datetime
 from uuid import UUID, uuid4
+
+from check_ins.repository import CheckInRepository
 
 from . import dtos
 from .models import Habit
@@ -6,11 +9,26 @@ from .repository import HabitRepository
 
 
 class HabitService:
-    def __init__(self, repository: HabitRepository):
+    def __init__(
+        self, repository: HabitRepository, check_in_repository: CheckInRepository
+    ):
         self.repository = repository
+        self.check_in_repository = check_in_repository
 
-    def get_all(self) -> list[Habit]:
-        return self.repository.get_all()
+    def get_all(self) -> list[dtos.HabitWithSummary]:
+        todays_habit_ids = set(
+            self.check_in_repository.habit_id_check_ins_by_date(datetime.date.today())
+        )
+        habits = self.repository.get_all()
+
+        return [
+            dtos.HabitWithSummary(
+                id=habit.id,
+                description=habit.description,
+                completed_today=habit.id in todays_habit_ids,
+            )
+            for habit in habits
+        ]
 
     def get(self, id: UUID) -> Habit | None:
         return self.repository.get(id)

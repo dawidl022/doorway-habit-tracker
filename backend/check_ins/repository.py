@@ -24,6 +24,10 @@ class CheckInRepository(ABC):
         """Delete a check-in for a habit on a specific date."""
         pass
 
+    def habit_id_check_ins_by_date(self, date: datetime.date) -> list[UUID]:
+        """List all habit IDs that have a check-in on a specific date."""
+        pass
+
 
 class SqlCheckInRepository(CheckInRepository):
     def __init__(self, Session: sqlalchemy.orm.sessionmaker[sqlalchemy.orm.Session]):
@@ -49,3 +53,12 @@ class SqlCheckInRepository(CheckInRepository):
                 CheckInTable.habit_id == habit_id, CheckInTable.date == date
             ).delete()
             session.commit()
+
+    def habit_id_check_ins_by_date(self, date: datetime.date) -> list[UUID]:
+        with self.Session() as session:
+            return [
+                row.habit_id
+                for row in session.query(CheckInTable.habit_id)
+                .filter(CheckInTable.date == date)
+                .all()
+            ]

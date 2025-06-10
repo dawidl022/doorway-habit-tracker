@@ -36,9 +36,9 @@ def configure_dependencies(config: Config, binder: Binder):
 
     Session = sqlalchemy.orm.sessionmaker(engine)
     habit_repo = SqlHabitRepository(Session)
-    habit_service = HabitService(habit_repo)
-
     check_in_repo = SqlCheckInRepository(Session)
+
+    habit_service = HabitService(habit_repo, check_in_repo)
     check_in_service = CheckInService(check_in_repo, habit_repo)
 
     binder.bind(HabitService, to=habit_service)
